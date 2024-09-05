@@ -1,7 +1,6 @@
-const { Sequelize } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
-
+import { Sequelize } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
 const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
@@ -14,4 +13,4 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
   dialect: dbConfig.dialect,
 });
 
-module.exports= sequelize;
+export default sequelize;

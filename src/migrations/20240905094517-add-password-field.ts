@@ -1,15 +1,18 @@
 'use strict';
 
+import { QueryInterface, Sequelize ,DataTypes} from 'sequelize';
+
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up (queryInterface: QueryInterface, Sequelize: Sequelize) {
     await queryInterface.addColumn('users', 'password', {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down (queryInterface: QueryInterface, Sequelize:Sequelize) {
     /**
      * Add reverting commands here.
      *

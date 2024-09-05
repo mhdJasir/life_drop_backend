@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ignore": ["node_modules", "dist"],
+    "ext": "ts,tsx",
+    "delay": 200,
+    "exec": "ts-node src/index.ts"
+  }

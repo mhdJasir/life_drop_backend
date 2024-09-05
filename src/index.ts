@@ -1,7 +1,7 @@
+import express from 'express';
+import sequelize from './config/database';
+import User from './models/user'; 
 
-const express= require('express');
-const sequelize = require('../config/database'); 
-const User = require('../models/user')(sequelize); 
 
 const app = express();
 const port = 3000;
