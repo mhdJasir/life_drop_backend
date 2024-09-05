@@ -1,23 +1,19 @@
-import express from 'express';
-import sequelize from './config/database';
-import User from './models/user'; 
-
-
+import express from "express";
 const app = express();
-const port = 3000;
+import bodyParser from "body-parser";
+import sequelize from "./config/database";
+import path from "./config/path_conf";
+import authRouter from "./routes/auth_route";
 
-app.get('/', async (req, res) => {
-  try {
-    await sequelize.sync();
-    const users = await User.findAll();
-    console.log(users);
-    res.send(users);
-  } catch (error) {
-    console.error('Error querying the database:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+const PORT: number = Number(process.env.PORT) || 3000;
 
-app.listen(port, () => {  
-  console.log(`Server is running on http://localhost:${port}`);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+// app.use("/images", express.static("images"));
+app.use(path, authRouter);
+
+
+app.listen(PORT, "0.0.0.0", async () => {
+  await sequelize.sync();
+  console.log(`sever up at  ${PORT}`);
 });

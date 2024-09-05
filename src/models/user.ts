@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
 import bcrypt from 'bcrypt';
 
-interface UserCreationAttributes extends Optional<User, 'id'> { } 
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> { }
 
 interface UserAttributes {
   id: number;
@@ -76,4 +76,4 @@ User.init(
   }
 );
 
-export default User;
+export { User, UserCreationAttributes };
