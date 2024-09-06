@@ -9,7 +9,7 @@ const PORT: number = Number(process.env.PORT) || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use("/images", express.static("images"));
+app.use("/images", express.static("images"));
 app.use(path, authRouter);
 
 
