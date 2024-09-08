@@ -1,7 +1,9 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
 import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
+import Tables from '../config/tables';
+import Associations from '../config/associations';
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> { }
 
@@ -31,7 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   generateToken(): Promise<string> {
     const jwtSecret = process.env.JWT_SECRET;
     return new Promise((resolve, reject) => {
-      Jwt.sign({ _id: this.id, name: this.password }, jwtSecret!, { expiresIn: "30d" }, (err, token) => {
+      Jwt.sign({ id: this.id, phone: this.phonenumber }, jwtSecret!, { expiresIn: "30d" }, (err, token) => {
         if (err) {
           return reject(err);
         }
@@ -40,8 +42,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
     });
   }
 
-  static associate(models: any): void {
-    // Define associations here
+  static associate(models: any): void {   
+    User.hasOne(models.Donor, {
+      foreignKey: 'userId',
+      as:  Associations.donor,
+    });
   }
 }
 
@@ -77,8 +82,8 @@ User.init(
   },
   {
     sequelize: sequelize,
-    modelName: 'User',
-    tableName: 'users',
+    modelName:  Tables.user,
+    tableName:  Tables.user,
     hooks: {
       beforeCreate: async (user: User) => {
         const salt = await bcrypt.genSalt(10);

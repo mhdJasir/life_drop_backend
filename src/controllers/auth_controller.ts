@@ -49,12 +49,12 @@ class AuthController {
   async login(req: Request, res: Response): Promise<Response> {
     try {
       const { phonenumber, password } = req.body;
-
       const user = await User.findOne({ where: { phonenumber } });
+      console.log(user);
+      
       if (!user) {
         return res.status(400).json({ message: 'No user registered with this number', });
       }
-
       const isMatchPassword = await user.comparePasswords(password);
       if (!isMatchPassword) {
         return res.send({
@@ -73,9 +73,8 @@ class AuthController {
           alt_phone: user.alt_phonenumber,
           gender: user.gender,
       }; 
-      return res.status(201).json({ message: 'User created successfully', user: userResponse });
-    } catch (error) {
-      console.error('Error creating user:', (error as Error).message);
+      return res.status(200).json({ message: 'User Login successfully', user: userResponse });
+    } catch (error) {      
       return res.status(300).json({ message: 'Internal server error occured' });
     }
   }

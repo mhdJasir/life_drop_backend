@@ -1,0 +1,78 @@
+import { Model, DataTypes, Optional } from 'sequelize';
+import sequelize from '../config/database';
+import Tables from '../config/tables';
+import Associations from '../config/associations';
+
+
+interface DonorCreationAttributes extends Optional<DonorAttributes, 'id'> { }
+
+interface DonorAttributes {
+  id: number;
+  userId: number;
+  bloodType: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  dob: Date;
+}
+
+class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
+ 
+  public id!: number;
+  public userId!: number;
+  public bloodType!: string;
+  public address!: string;
+  public latitude!: number;
+  public longitude!: number;
+  public dob!: Date;
+
+
+  static associate(models: any): void { 
+    Donor.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: Associations.user,
+      });
+  }
+}
+
+Donor.init(
+  {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
+      bloodType: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true,
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      latitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      longitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      dob: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+  },
+  {
+    sequelize: sequelize,
+    modelName:  Tables.donor,
+    tableName:  Tables.donor,
+  }
+);
+
+export { Donor, DonorCreationAttributes };
