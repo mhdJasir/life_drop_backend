@@ -17,4 +17,4 @@ const config = [
         },
     },
 ];
-export const apps = config;
+export default config;
