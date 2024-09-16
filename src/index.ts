@@ -15,10 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/images", express.static("images"));
 
-
 app.use(path, authRouter);
 app.use(path, authMiddleware, donorRoute);
-app.use(path, districtRoute);
+app.use(path, authMiddleware, districtRoute);
 
 app.use(errorHandler);
 

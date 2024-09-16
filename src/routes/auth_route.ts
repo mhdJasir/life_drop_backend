@@ -22,5 +22,6 @@ const upload = multer({
 
 router.post('/register',upload.single("image"), AuthController.register);
 router.post('/login', AuthController.login);
+router.post('/userExists', AuthController.userExist);
 
 export default router;

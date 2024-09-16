@@ -9,7 +9,9 @@ interface DonorCreationAttributes extends Optional<DonorAttributes, 'id'> { }
 interface DonorAttributes {
   id: number;
   userId: number;
+  districtId: number;
   bloodType: string;
+  place: string;
   address: string;
   latitude: number;
   longitude: number;
@@ -20,8 +22,10 @@ class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
  
   public id!: number;
   public userId!: number;
+  public districtId!: number;
   public bloodType!: string;
   public address!: string;
+  public place!: string;
   public latitude!: number;
   public longitude!: number;
   public dob!: Date;
@@ -31,6 +35,10 @@ class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
     Donor.belongsTo(models.User, {
         foreignKey: 'userId',
         as: Associations.user,
+      });
+      Donor.belongsTo(models.District, {
+        foreignKey: 'districtId',
+        as: Associations.district,
       });
   }
 }
@@ -51,7 +59,15 @@ Donor.init(
         allowNull: false,
         unique: true,
       },
+      districtId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      place: {
         type: DataTypes.STRING,
         allowNull: false,
       },

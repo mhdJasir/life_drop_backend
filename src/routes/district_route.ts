@@ -5,5 +5,6 @@ const router = express.Router();
 
 
 router.post('/getDistricts', DistrctController.getDistricts);
+router.post('/getDistrict', DistrctController.getADistrict);
 
 export default router;

@@ -1,21 +1,21 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { User, UserCreationAttributes } from '../models/user';
 import dotenv from 'dotenv';
 
 dotenv.config()
 
 class AuthController {
-  async register(req: Request, res: Response): Promise<void> {
+  async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { name, gender, password, phonenumber, alt_phonenumber } = req.body;
       const existingUser = await User.findOne({ where: { phonenumber } });
       if (existingUser) {
         res.status(400).json({ message: 'User with this phone number already exists' });
         return;
-      }      
+      }
       let filename;
-      if(req.file){
-        filename =req.file.path;
+      if (req.file) {
+        filename = req.file.path;
       }
       const newUserData: UserCreationAttributes = {
         name: name as string,
@@ -37,47 +37,76 @@ class AuthController {
         alt_phonenumber: newUser.alt_phonenumber,
       };
 
-      res.status(201).json({ message: 'User registered successfully', user: userResponse });
+      res.status(201).json({ status: 200, message: 'User registered successfully', user: userResponse });
     } catch (error) {
-      console.error('Error creating user:', (error as Error).message);
-      res.status(300).json({ message: 'Internal server error occured' });
+      next(error);
       return;
     }
   }
 
 
-  async login(req: Request, res: Response): Promise<Response> {
+  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { phonenumber, password } = req.body;
       const user = await User.findOne({ where: { phonenumber } });
       console.log(user);
-      
+
       if (!user) {
-        return res.status(400).json({ message: 'No user registered with this number', });
+        res.status(400).json({ message: 'No user registered with this number', });
+        return;
       }
       const isMatchPassword = await user.comparePasswords(password);
       if (!isMatchPassword) {
-        return res.send({
-          status: false,
+        res.send({
+          status: 400,
           message: "Wrong password entered",
         });
+        return;
       }
       const token = await user.generateToken();
-      const userResponse={
-          message: "Login successful",
-          id: user.id,
-          token: token,
-          name: user.name,
-          phone: user.phonenumber,
-          image: user.image,
-          alt_phone: user.alt_phonenumber,
-          gender: user.gender,
-      }; 
-      return res.status(200).json({ message: 'User Login successfully', user: userResponse });
-    } catch (error) {      
-      return res.status(300).json({ message: 'Internal server error occured' });
+      const userResponse = {
+        id: user.id,
+        token: token,
+        name: user.name,
+        phone: user.phonenumber,
+        image: user.image,
+        alt_phone: user.alt_phonenumber,
+        gender: user.gender,
+      };
+      res.status(200).json(
+        {
+          status: 200,
+          message: 'User Login successfully',
+          user: userResponse
+        });
+      return;
+
+    } catch (error) {
+      next(error);
     }
   }
+
+  async userExist(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { phonenumber } = req.body;
+    const user = await User.findOne({ where: { phonenumber } });
+    if (user) {
+      res.send(
+        {
+          status: 200,
+          message: "User exists!",
+        }
+      );
+      return;
+    }
+    res.send(
+      {
+        status: 400,
+        message: "User donesnt exists",
+      }
+    );
+    return;
+  }
+
 }
 
 export default new AuthController();

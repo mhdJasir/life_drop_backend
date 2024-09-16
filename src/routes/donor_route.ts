@@ -22,5 +22,6 @@ const upload = multer({
 
 router.post('/donorRegistration', DonorController.donorRegistration);
 router.post('/getDonors', DonorController.getDonors);
+router.post('/getBloodTypeAvailability', DonorController.getBloodTypeAvailability);
 
 export default router;
