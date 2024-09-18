@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
+    "module": "ESNext", 
+    "moduleResolution": "node",
     "target": "es6",
-    "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,5 +1,6 @@
 {
   "name": "life-drop",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -33,6 +34,7 @@
     "mysql2": "^3.11.0",
     "node-appwrite": "^14.0.0",
     "sequelize": "^6.37.3",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "ts-node": "^10.9.2"
   }
 }
