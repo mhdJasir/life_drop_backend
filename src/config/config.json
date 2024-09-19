@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "life-drop",
-    "password": "6758",
+    "password": "lifedrop",
     "database": "life-drop",
     "host": "127.0.0.1",
     "dialect": "mysql"

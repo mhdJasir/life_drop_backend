@@ -6,7 +6,6 @@ dotenv.config();
 
 const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-console.log(process.env.PASSWORD);
 
 const environment = process.env.NODE_ENV || 'development'; 
 const dbConfig = config[environment];
