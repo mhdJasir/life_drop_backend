@@ -9,7 +9,7 @@ import authMiddleware from "./middlewares/auth";
 import errorHandler from "./error_handling/error_handler";
 import db from "./models";
 
-app.get(path+"/getJasir",(req: Request,res:Response)=>{
+app.get("/api/getJasir",(req: Request,res:Response)=>{
   return res.send(
    {
      name: "Jasir"
