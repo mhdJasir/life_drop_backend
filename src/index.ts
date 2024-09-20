@@ -9,6 +9,14 @@ import authMiddleware from "./middlewares/auth";
 import errorHandler from "./error_handling/error_handler";
 import db from "./models";
 
+app.get(path+"/getJasir",(req: Request,res:Response)=>{
+  return res.send(
+   {
+     name: "Jasir"
+   }
+  );
+ })
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/images", express.static("images"));
@@ -16,14 +24,6 @@ app.use("/images", express.static("images"));
 app.use(path, authRouter);
 app.use(path, authMiddleware, donorRoute);
 app.use(path, authMiddleware, districtRoute);
-
-app.get(path+"/getJasir",(req: Request,res:Response)=>{
- return res.send(
-  {
-    name: "Jasir"
-  }
- );
-})
 
 app.use(errorHandler);
 
