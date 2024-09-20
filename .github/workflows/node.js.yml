@@ -40,7 +40,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}  # Username to log into EC2 (e.g., ubuntu)
         key: ${{ secrets.EC2_KEY }}  # Private SSH key for the EC2 instance
         script: |
-          cd /path/to/life_drop_backend  # Path to your Node.js project on EC2
+          cd life_drop_backend/
           git pull origin main  # Pull latest changes from GitHub
           npm install  # Install dependencies
           pm2 restart all  # Restart your Node.js application using PM2
