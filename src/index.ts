@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from 'express';
 const app = express();
 import bodyParser from "body-parser";
 import path from "./config/path_conf";
@@ -16,6 +16,14 @@ app.use("/images", express.static("images"));
 app.use(path, authRouter);
 app.use(path, authMiddleware, donorRoute);
 app.use(path, authMiddleware, districtRoute);
+
+app.get(path+"/getJasir",(req: Request,res:Response)=>{
+ return res.send(
+  {
+    name: "Jasir"
+  }
+ );
+})
 
 app.use(errorHandler);
 
