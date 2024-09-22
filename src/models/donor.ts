@@ -86,8 +86,8 @@ Donor.init(
   },
   {
     sequelize: sequelize,
-    modelName:  Tables.donor,
-    tableName:  Tables.donor,
+    modelName:  "Donor",
+    tableName:  "Donors",
   }
 );
 
