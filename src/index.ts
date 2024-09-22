@@ -22,6 +22,6 @@ app.use(errorHandler);
 const PORT: number = Number(process.env.PORT) || 3000;
 
 app.listen(PORT, "0.0.0.0", async () => {
-  await (db as any).sequelize.sync({ force: true });
+  await (db as any).sequelize.sync();
   console.log(`Server running at http://0.0.0.0:${PORT}`);
 });
