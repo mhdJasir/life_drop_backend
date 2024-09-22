@@ -11,7 +11,7 @@ class DistrctController {
     static async getDistricts(_: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const districtsWithDonorCount = await District.findAll({
-                attributes: ['id', 'name', [sequelize.fn('COUNT', sequelize.col('Donor.id')), 'donorCount']],
+                attributes: ['id', 'name', [sequelize.fn('COUNT', sequelize.col('donor.id')), 'donorCount']], // Changed Donor.id to donor.id
                 include: [{
                     as: Associations.donor,
                     model: Donor,
@@ -20,7 +20,7 @@ class DistrctController {
                 group: ['District.id'],
                 order: [[sequelize.literal('donorCount'), 'DESC']],
             });
-
+    
             res.status(200).send({
                 status: 200,
                 message: "Donors listed successfully",
@@ -31,7 +31,7 @@ class DistrctController {
             next(error);
         }
     }
-
+    
     static async getADistrict(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { districtId } = req.body;
