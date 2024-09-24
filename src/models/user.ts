@@ -2,13 +2,13 @@ import { Model, DataTypes, Optional, Sequelize } from 'sequelize';
 import sequelize from '../config/database';
 import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
-import Tables from '../config/tables';
 import Associations from '../config/associations';
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> { }
 
 interface UserAttributes {
   id: number;
+  donor_id?: number;
   name: string;
   gender: string;
   password: string;
@@ -23,6 +23,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   }
 
   public id!: number;
+  public donor_id!: number;
   public name!: string;
   public gender!: string;
   public password!: string;
@@ -47,6 +48,14 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
       foreignKey: 'userId',
       as:  Associations.donor,
     });
+    User.hasMany(models.phone_requests, {
+      foreignKey: 'user_id',
+      as:  'phone_requests',
+    });
+    User.hasMany(models.phone_requests, {
+      foreignKey: 'donor_id',
+      as:  'phone_requests_as_donor',
+    });
   }
 }
 
@@ -56,6 +65,10 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    donor_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,

@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
-import Tables from '../config/tables';
 import Associations from '../config/associations';
 
 
@@ -19,7 +18,7 @@ interface DonorAttributes {
 }
 
 class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
- 
+
   public id!: number;
   public userId!: number;
   public districtId!: number;
@@ -31,63 +30,63 @@ class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
   public dob!: Date;
 
 
-  static associate(models: any): void { 
+  static associate(models: any): void {
     Donor.belongsTo(models.User, {
-        foreignKey: 'userId',
-        as: Associations.user,
-      });
-      Donor.belongsTo(models.District, {
-        foreignKey: 'districtId',
-        as: Associations.district,
-      });
+      foreignKey: 'userId',
+      as: Associations.user,
+    });
+    Donor.belongsTo(models.District, {
+      foreignKey: 'districtId',
+      as: Associations.district,
+    });
   }
 }
 
 Donor.init(
   {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-      },
-      bloodType: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-      districtId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      address: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      place: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      latitude: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      longitude: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
-      dob: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
-      },
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    bloodType: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+    },
+    districtId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    place: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    latitude: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    longitude: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    dob: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
   },
   {
     sequelize: sequelize,
-    modelName:  "Donor",
-    tableName:  "Donors",
+    modelName: "Donor",
+    tableName: "Donors",
   }
 );
 

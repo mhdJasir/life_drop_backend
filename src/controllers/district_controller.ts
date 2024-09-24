@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import district from '../models/district';
 import District from '../models/district';
 import { Donor } from '../models/donor';
 import Associations from '../config/associations';
@@ -11,7 +10,7 @@ class DistrctController {
     static async getDistricts(_: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const districtsWithDonorCount = await District.findAll({
-                attributes: ['id', 'name', [sequelize.fn('COUNT', sequelize.col('donor.id')), 'donorCount']], // Changed Donor.id to donor.id
+                attributes: ['id', 'name', [sequelize.fn('COUNT', sequelize.col('donor.id')), 'donorCount']],
                 include: [{
                     as: Associations.donor,
                     model: Donor,

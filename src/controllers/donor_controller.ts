@@ -18,10 +18,10 @@ const getProtectedData = (req: AuthenticatedRequest, res: Response): {} => {
 class DonorController {
     static async donorRegistration(req: Request, res: Response, next: NextFunction): Promise<void> {
         const user = getProtectedData(req, res);
-        const { blood_group,place, address, latitude, district_id, longitude, dob } = req.body;
+        const { blood_group, place, address, latitude, district_id, longitude, dob } = req.body;
         try {
             const data = await Donor.findOne({ where: { userId: (user as any).id } });
-            
+
             if (data) {
                 res.status(400).send(
                     {
@@ -42,7 +42,10 @@ class DonorController {
                 userId: (user as any).id,
             };
             const donor = await Donor.create(donorData);
-
+            await User.update(
+                { donor_id: donor.id },
+                { where: { id: donor.userId } }
+            );
             res.status(200).send(
                 {
                     status: 200,
@@ -75,7 +78,7 @@ class DonorController {
                     {
                         model: User,
                         as: Associations.user,
-                        attributes: ["id","name","gender","phonenumber","alt_phonenumber"],
+                        attributes: ["id", "name", "gender", "phonenumber", "alt_phonenumber"],
                     },
                 ],
             });
@@ -95,26 +98,26 @@ class DonorController {
     static async getBloodTypeAvailability(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const bloodGroups = await Donor.findAll({
-                attributes: ["bloodType",[sequelize.fn('COUNT', sequelize.col('bloodType')), 'count']],
+                attributes: ["bloodType", [sequelize.fn('COUNT', sequelize.col('bloodType')), 'count']],
                 group: ['bloodType'],
             });
             const bloodGroupsMap: { [key: string]: number } = {};
             bloodGroups.forEach((donor: any) => {
-              bloodGroupsMap[donor.bloodType] = donor.getDataValue('count');
+                bloodGroupsMap[donor.bloodType] = donor.getDataValue('count');
             });
             const groups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
             groups.forEach((group) => {
-              if (!bloodGroupsMap[group]) {
-                bloodGroupsMap[group] = 0;  
-              }
+                if (!bloodGroupsMap[group]) {
+                    bloodGroupsMap[group] = 0;
+                }
             });
-            
+
             const finalBloodGroups = Object.keys(bloodGroupsMap).map((key) => ({
-              bloodType: key,
-              count: bloodGroupsMap[key],
+                bloodType: key,
+                count: bloodGroupsMap[key],
             }));
-            
+
             res.status(200).send({
                 message: "Blood types fetched successfully",
                 status: 200,

@@ -7,7 +7,10 @@ dotenv.config()
 class AuthController {
   async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log(req.body);
+
       const { name, gender, password, phonenumber, alt_phonenumber } = req.body;
+
       const existingUser = await User.findOne({ where: { phonenumber } });
       if (existingUser) {
         res.status(400).json({ message: 'User with this phone number already exists' });
@@ -17,6 +20,7 @@ class AuthController {
       if (req.file) {
         filename = req.file.path;
       }
+
       const newUserData: UserCreationAttributes = {
         name: name as string,
         gender: gender as string,
