@@ -35,15 +35,17 @@ TestModel.init(
         },
         dateTime: {
             type: DataTypes.STRING,
-            get() {
-              return getNow();
-            }
         }
     },
     {
+        timestamps: false,
         sequelize,
         modelName: 'test_api',
     }
 );
+
+TestModel.beforeCreate((instance: TestAttributes) => {
+    instance.dateTime = getNow(); 
+});
 
 export { TestModel, TestAttributes };

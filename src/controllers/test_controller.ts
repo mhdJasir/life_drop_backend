@@ -27,14 +27,16 @@ class TestController {
     static async getData(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
 
-            const data = await TestModel.findAll({ attributes: ["api","request","response","createdAt"] });
+            const data = await TestModel.findAll({ attributes: ["api","request","response","dateTime",] });
             const list: Array<Json> = [];
 
             data.forEach(entry => {
                 const parsedReq = JSON.parse((entry.request as any));
                 const parsedData = JSON.parse((entry.response as any));
+                console.log(entry);
+                
                 const data = {
-                    dateTime: (entry as any).dateTime,
+                    dateTime: entry.dateTime,
                     api: entry.api,
                     request: parsedReq,
                     response: parsedData,
