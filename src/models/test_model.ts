@@ -1,20 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
 import { Json } from 'sequelize/types/utils';
+import getNow from '../config/timezone';
 
 
 interface TestAttributes {
     api: string;
     request: Json;
     response: Json;
-    createdAt: string;
+    dateTime?: string;
 }
 
 class TestModel extends Model<TestAttributes> implements TestAttributes {
     api!: string;
     request!: Json;
     response!: Json;
-    createdAt!: string;
+    dateTime!: string;
 
     static associate(models: any) {
 
@@ -32,11 +33,10 @@ TestModel.init(
         response: {
             type: DataTypes.JSON,
         },
-        createdAt: {
+        dateTime: {
             type: DataTypes.STRING,
             get() {
-              const utcDate = this.getDataValue('createdAt');
-              return utcDate ? new Date(utcDate).toLocaleString() : null;
+              return getNow();
             }
         }
     },

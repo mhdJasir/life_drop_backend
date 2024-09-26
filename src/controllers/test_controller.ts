@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { TestModel, TestAttributes } from '../models/test_model';
 import { Json } from 'sequelize/types/utils';
-import localTime from '../config/timezone';
 
 class TestController {
 
@@ -12,7 +11,6 @@ class TestController {
                 api: api,
                 request: request,
                 response: response,
-                createdAt: localTime,
             };
             const savedData = await TestModel.create(val);
             res.status(200).send({
@@ -36,7 +34,7 @@ class TestController {
                 const parsedReq = JSON.parse((entry.request as any));
                 const parsedData = JSON.parse((entry.response as any));
                 const data = {
-                    createdAt: (entry as any).createdAt,
+                    dateTime: (entry as any).dateTime,
                     api: entry.api,
                     request: parsedReq,
                     response: parsedData,
