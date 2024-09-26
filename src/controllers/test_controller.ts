@@ -1,14 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import { TestModel, TestAttributes } from '../models/test_model';
-import { stringify } from 'querystring';
+import { Json } from 'sequelize/types/utils';
 
 class TestController {
 
     static async saveData(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { data } = req.body;
+            const { api, request, response } = req.body;
             const val: TestAttributes = {
-                data: stringify(data)
+                api: api,
+                request: request,
+                response: response,
+                createdAt: new Date().toISOString(),
             };
             const savedData = await TestModel.create(val);
             res.status(200).send({
@@ -24,10 +27,26 @@ class TestController {
 
     static async getData(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const data = await TestModel.findAll({attributes: ["data"]});
+
+            const data = await TestModel.findAll({ attributes: ["api","request","response","createdAt"] });
+            const list: Array<Json> = [];
+
+            data.forEach(entry => {
+                const parsedReq = JSON.parse((entry.request as any));
+                const parsedData = JSON.parse((entry.response as any));
+                const data = {
+                    createdAt: (entry as any).createdAt,
+                    api: entry.api,
+                    request: parsedReq,
+                    response: parsedData,
+                };
+                list.push(
+                    data as any
+                );
+            });
             res.status(200).send({
                 message: "Data listed successfully",
-                data: data
+                data: list
             });
             return;
         } catch (error) {
