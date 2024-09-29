@@ -2,32 +2,31 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database';
 
 interface BloodRequestAttributes {
-  id: number;
+  id?: number;
   user_id: number;
-  donor_id?: number; 
   patient_name: string;
   age: number;
   gender: string;
   bystander_name: string;
   phone: string;
-  alt_phone?: string; 
+  alt_phone?: string;
   blood_group: string;
   date_of_requirement: Date;
   time_of_requirement: string;
   units: number;
-  latitude?: number;
-  longitude?: number;
+  latitude: number;
+  longitude: number;
   place: string;
+  priority?: string;
   address: string;
 }
 
-interface BloodRequestCreationAttributes extends Optional<BloodRequestAttributes, 'id'> {}
+interface BloodRequestCreationAttributes extends Optional<BloodRequestAttributes, 'id'> { }
 
 class BloodRequest extends Model<BloodRequestAttributes, BloodRequestCreationAttributes>
   implements BloodRequestAttributes {
   public id!: number;
   public user_id!: number;
-  public donor_id?: number;
   public patient_name!: string;
   public age!: number;
   public gender!: string;
@@ -35,11 +34,12 @@ class BloodRequest extends Model<BloodRequestAttributes, BloodRequestCreationAtt
   public phone!: string;
   public alt_phone?: string;
   public blood_group!: string;
+  public priority!: string;
   public date_of_requirement!: Date;
   public time_of_requirement!: string;
   public units!: number;
-  public latitude?: number;
-  public longitude?: number;
+  public latitude!: number;
+  public longitude!: number;
   public place!: string;
   public address!: string;
 
@@ -63,10 +63,6 @@ BloodRequest.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    donor_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     patient_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -87,9 +83,13 @@ BloodRequest.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    priority: {
+      type: DataTypes.STRING,
+      allowNull: true, 
+    },
     alt_phone: {
       type: DataTypes.STRING,
-      allowNull: true, // Optional alternate phone
+      allowNull: true, 
     },
     blood_group: {
       type: DataTypes.STRING,
@@ -109,11 +109,11 @@ BloodRequest.init(
     },
     latitude: {
       type: DataTypes.FLOAT,
-      allowNull: true,
+      allowNull: false,
     },
     longitude: {
       type: DataTypes.FLOAT,
-      allowNull: true,
+      allowNull: false,
     },
     place: {
       type: DataTypes.STRING,
@@ -127,8 +127,8 @@ BloodRequest.init(
   {
     sequelize,
     tableName: 'blood_requests',
-    timestamps: true, 
+    timestamps: false,
   }
 );
 
-export default BloodRequest;
+export { BloodRequest, BloodRequestAttributes };

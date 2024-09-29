@@ -7,6 +7,7 @@ import donorRoute from "./routes/donor_route";
 import districtRoute from "./routes/district_route";
 import testRoute from "./routes/test_route";
 import phoneReqRoute from "./routes/phone_requests_route";
+import bloodRequestRoute from "./routes/blood_request_route";
 import authMiddleware from "./middlewares/auth";
 import errorHandler from "./error_handling/error_handler";
 import db from "./models";
@@ -20,6 +21,7 @@ app.use(path, authRouter);
 app.use(path, authMiddleware, donorRoute);
 app.use(path, authMiddleware, districtRoute);
 app.use(path, authMiddleware, phoneReqRoute);
+app.use(path, authMiddleware, bloodRequestRoute);
 
 app.use(errorHandler);
 
