@@ -39,6 +39,10 @@ class Donor extends Model<DonorAttributes, DonorCreationAttributes> {
       foreignKey: 'districtId',
       as: Associations.district,
     });
+    Donor.hasMany(models.DonorRequestResponse, {
+      foreignKey: 'donor_id',
+      as: 'donor',
+    });
   }
 }
 

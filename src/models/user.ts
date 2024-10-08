@@ -56,6 +56,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
       foreignKey: 'donor_id',
       as:  'phone_requests_as_donor',
     });
+    User.hasMany(models.DonorRequestResponse, {
+      foreignKey: 'user_id',
+      as:  'user',
+    });
   }
 }
 

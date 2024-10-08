@@ -4,10 +4,12 @@ import { Donor } from '../models/donor';
 import  District  from '../models/district';
 import { Sequelize } from 'sequelize';
 import { PhoneRequests } from './phone_requests';
+import {DonorRequestResponse} from './donor_request_responses';
+import { BloodRequest } from './blood_requests';
 
 const db: { [key: string]: any, sequelize?: Sequelize, Sequelize?: typeof Sequelize } = {};
 
-for (const model of [User, Donor,District,PhoneRequests]) {
+for (const model of [User, Donor,District,PhoneRequests,BloodRequest,DonorRequestResponse]) {
   db[model.name] = model;
 }
 Object.keys(db).forEach(modelName => {

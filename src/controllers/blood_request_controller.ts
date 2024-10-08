@@ -25,26 +25,33 @@ class BloodRequestController {
             const {
                 patient_name, age, gender, bystander_name, phone, blood_group,
                 date_of_requirement, time_of_requirement, units, place, address,
-                alt_phone,latitude,longitude
+                alt_phone, latitude, longitude
             } = req.body;
 
             const existingRequest = await BloodRequest.findOne({
                 where: {
-                  user_id: (user as any).id,
-                  patient_name: patient_name,
-                  date_of_requirement: date_of_requirement,
+                    user_id: (user as any).id,
+                    patient_name: patient_name,
+                    date_of_requirement: date_of_requirement,
                 },
-              });
-            
-              if (existingRequest) {
+            });
+
+            if (existingRequest) {
                 res.status(400).send(
                     {
-                     status: 400,
-                     message: "This request is clreated already",
+                        status: 400,
+                        message: "This request is clreated already",
                     }
                 );
                 return;
-              }
+            }
+            const donors = await Donor.findAll({
+                where: {
+                    bloodType: blood_group,
+                },
+            });
+
+            const priority = calculatePriority(date_of_requirement, donors.length);
 
             const request: BloodRequestAttributes = {
                 user_id: (user as any).id,
@@ -52,11 +59,12 @@ class BloodRequestController {
                 age: age,
                 gender: gender,
                 latitude: latitude,
-                longitude:longitude,
-                alt_phone:alt_phone,
+                longitude: longitude,
+                alt_phone: alt_phone,
                 bystander_name: bystander_name,
                 phone: phone,
                 blood_group: blood_group,
+                priority: priority,
                 date_of_requirement: date_of_requirement,
                 time_of_requirement: time_of_requirement,
                 units: units,
@@ -80,21 +88,21 @@ class BloodRequestController {
 
     static async getBloodRequests(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { districtId, bloodType, priority, page, limit } = req.body;
+            const { districtId, blood_group, priority, page, limit } = req.body;
             const whereCondition: { [key: string]: any } = {};
 
             if (districtId) {
                 whereCondition.districtId = districtId;
             }
 
-            if (bloodType) {
-                whereCondition.bloodType = bloodType;
+            if (blood_group) {
+                whereCondition.blood_group = blood_group;
             }
             if (priority) {
                 whereCondition.priority = priority;
             }
-            const count= limit || 20;
-            const pageNumber=  page || 1;
+            const count = limit || 20;
+            const pageNumber = page || 1;
             const offset = (pageNumber - 1) * count;
             const bloodRequests = await BloodRequest.findAll(
                 {
@@ -118,14 +126,15 @@ class BloodRequestController {
                 group: ['bloodType'],
             }) as unknown as DonorGroupCount[];
 
-            bloodRequests.forEach(request => {
+            bloodRequests.forEach(async request => {
                 const donorCount = donorsGroupedByBloodGroup.find(
                     group => group.blood_group === request.blood_group
                 )?.count || 0;
 
                 const priority = calculatePriority(request.date_of_requirement, donorCount);
-                
+
                 request.priority = priority;
+                request.save();
             });
 
             res.status(200).send(

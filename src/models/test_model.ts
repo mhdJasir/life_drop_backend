@@ -7,14 +7,12 @@ import getNow from '../config/timezone';
 interface TestAttributes {
     api: string;
     request: Json;
-    response: Json;
     dateTime?: string;
 }
 
 class TestModel extends Model<TestAttributes> implements TestAttributes {
     api!: string;
     request!: Json;
-    response!: Json;
     dateTime!: string;
 
     static associate(models: any) {
@@ -28,9 +26,6 @@ TestModel.init(
             type: DataTypes.STRING,
         },
         request: {
-            type: DataTypes.JSON,
-        },
-        response: {
             type: DataTypes.JSON,
         },
         dateTime: {

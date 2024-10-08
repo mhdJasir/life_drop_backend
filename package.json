@@ -16,6 +16,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.5.4",
+    "@types/node-cron": "^3.0.11",
     "@types/sequelize": "^4.28.20",
     "globals": "^15.9.0",
     "nodemon": "^3.1.4",
@@ -33,6 +34,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.0",
     "node-appwrite": "^14.0.0",
+    "node-cron": "^3.0.3",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
     "ts-node": "^10.9.2"

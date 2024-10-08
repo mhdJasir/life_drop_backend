@@ -49,6 +49,7 @@ class BloodRequest extends Model<BloodRequestAttributes, BloodRequestCreationAtt
   static associate(models: any) {
     BloodRequest.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
     BloodRequest.belongsTo(models.Donor, { foreignKey: 'donor_id', as: 'donor' });
+    BloodRequest.hasMany(models.DonorRequestResponse, { foreignKey: 'responses', as: 'blood_request' });
   }
 }
 
