@@ -25,7 +25,7 @@ class BloodRequestController {
             const {
                 patient_name, age, gender, bystander_name, phone, blood_group,
                 date_of_requirement, time_of_requirement, units, place, address,
-                alt_phone, latitude, longitude
+                alt_phone, latitude, longitude,other_info,
             } = req.body;
 
             const existingRequest = await BloodRequest.findOne({
@@ -70,6 +70,7 @@ class BloodRequestController {
                 units: units,
                 place: place,
                 address: address,
+                other_info: other_info,
             };
             const savedData = await BloodRequest.create(request);
             res.status(200).send(

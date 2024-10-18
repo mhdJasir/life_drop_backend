@@ -3,7 +3,7 @@ import { BloodRequest } from '../models/blood_requests';
 import { Op } from 'sequelize';
 
 
-const deleteInvalidRequests=  cron.schedule('* * * * *', async () => {
+const deleteInvalidRequests=  cron.schedule('0 1 * * *', async () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
     await BloodRequest.destroy({

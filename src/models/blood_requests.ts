@@ -19,6 +19,7 @@ interface BloodRequestAttributes {
   place: string;
   priority?: string;
   address: string;
+  other_info: string;
 }
 
 interface BloodRequestCreationAttributes extends Optional<BloodRequestAttributes, 'id'> { }
@@ -42,6 +43,7 @@ class BloodRequest extends Model<BloodRequestAttributes, BloodRequestCreationAtt
   public longitude!: number;
   public place!: string;
   public address!: string;
+  public other_info!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -123,6 +125,10 @@ BloodRequest.init(
     address: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    other_info: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {
