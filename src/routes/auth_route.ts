@@ -7,7 +7,7 @@ import path from "path";
 const router = express.Router();
 
 const storageEngine = multer.diskStorage({
-    destination: "./images/users",
+    destination: "./images",
     filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       const extension = path.extname(file.originalname);

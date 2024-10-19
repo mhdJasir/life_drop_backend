@@ -13,8 +13,6 @@ import errorHandler from "./error_handling/error_handler";
 import db from "./models";
 import deleteInvalidRequests from './crone/delete_outdated_requests';
 
-
-
 ///CRON-JOBS
 deleteInvalidRequests.start();
 
