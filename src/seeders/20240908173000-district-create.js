@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Districts', [
       {
-        name: 'Kasargode',
+        name: 'Kasaragod',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -20,7 +20,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: 'Kozhikkode',
+        name: 'Kozhikode',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -35,7 +35,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: 'Thrissure',
+        name: 'Thrissur',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -70,7 +70,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: 'Thiruvananthpuram',
+        name: 'Thiruvananthapuram',
         createdAt: new Date(),
         updatedAt: new Date(),
       }
