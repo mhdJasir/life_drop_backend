@@ -29,8 +29,6 @@ app.use(path, authMiddleware, donorReqResRoute);
 
 app.use(errorHandler);
 
-
-
 const PORT: number = Number(process.env.PORT) || 3000;
 
 app.listen(PORT, "0.0.0.0", async () => {

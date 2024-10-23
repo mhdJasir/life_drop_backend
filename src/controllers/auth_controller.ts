@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { User, UserCreationAttributes } from '../models/user';
 import dotenv from 'dotenv';
 import { JwtPayload } from 'jsonwebtoken';
+import Associations from '../config/associations';
+import { Donor } from '../models/donor';
 
 dotenv.config()
 
@@ -124,7 +126,13 @@ class AuthController {
     const user = await User.findOne({
       where: { id: (useJwt as any).id }, attributes: [
         "id", "donor_id", "name", "gender", "phonenumber", "alt_phonenumber", "image",
-      ]
+      ],
+      include: [
+        {
+            model: Donor,
+            as: Associations.donor,
+        },
+    ],
     });
     res.send(
       {
