@@ -3,6 +3,7 @@ import {Request,} from 'express';
 import AuthController from '../controllers/auth_controller';
 import multer from "multer";
 import path from "path";
+import authMiddleware from "../middlewares/auth";
 
 const router = express.Router();
 
@@ -23,5 +24,7 @@ const upload = multer({
 router.post('/register',upload.single("image"), AuthController.register);
 router.post('/login', AuthController.login);
 router.post('/userExists', AuthController.userExist);
+router.get('/getProfile',authMiddleware, AuthController.getProfile);
+router.put('/updateProfile',authMiddleware,upload.single("image"), AuthController.updateProfile);
 
 export default router;

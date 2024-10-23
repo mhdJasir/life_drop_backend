@@ -1,14 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 import { User, UserCreationAttributes } from '../models/user';
 import dotenv from 'dotenv';
+import { JwtPayload } from 'jsonwebtoken';
 
 dotenv.config()
+
+interface AuthenticatedRequest extends Request {
+  user?: JwtPayload | string;
+}
+
+const getProtectedData = (req: AuthenticatedRequest, res: Response): {} => {
+  const user = req.user as JwtPayload;
+  return user;
+};
 
 class AuthController {
   async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log(req.body);
-
       const { name, gender, password, phonenumber, alt_phonenumber } = req.body;
 
       const existingUser = await User.findOne({ where: { phonenumber } });
@@ -111,6 +119,56 @@ class AuthController {
     return;
   }
 
+  async getProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const useJwt = getProtectedData(req, res);
+    const user = await User.findOne({
+      where: { id: (useJwt as any).id }, attributes: [
+        "id", "donor_id", "name", "gender", "phonenumber", "alt_phonenumber", "image",
+      ]
+    });
+    res.send(
+      {
+        status: 200,
+        message: "User profile fetched successfully",
+        data: user
+      }
+    );
+    return;
+  }
+
+  async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const useJwt = getProtectedData(req, res);
+    const { name } = req.body
+    const user = await User.findOne({
+      where: { id: (useJwt as any).id }
+    });
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+    let filename;
+    if (req.file) {
+      filename = req.file.path;
+    }
+    user.name= name;
+    user.image= filename as string;
+    await user.save();
+
+    const userData = user.toJSON() as any;
+
+    delete userData.password;
+    delete userData.createdAt;
+    delete userData.updatedAt;
+
+    res.send(
+      {
+        status: 200,
+        message: "User profile fetched successfully",
+        data: userData
+      }
+    );
+    return;
+  }
 }
 
 export default new AuthController();

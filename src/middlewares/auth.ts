@@ -17,6 +17,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
         if(payLoad===undefined){
             return res.status(403).json({ message: 'Please login again' });
         }
+        
         if (typeof payLoad === 'object' && (payLoad as JwtPayload)) {
             (req as any).user = payLoad;
             next();
