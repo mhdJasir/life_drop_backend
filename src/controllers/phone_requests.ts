@@ -32,7 +32,6 @@ class PhoneRequestsController {
                             {
                                 model: Donor,
                                 as: Associations.donor,
-                                attributes: ['place', 'address', 'latitude','longitude'],
                             }
                         ]
                     },
@@ -50,7 +49,6 @@ class PhoneRequestsController {
                             {
                                 model: Donor,
                                 as: Associations.donor,
-                                attributes: ['place', 'address', 'latitude','longitude'],
                             }
                         ]
                     },
