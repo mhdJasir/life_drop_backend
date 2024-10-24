@@ -86,6 +86,7 @@ class AuthController {
         image: user.image,
         alt_phone: user.alt_phonenumber,
         gender: user.gender,
+        donor_id: user.donor_id,
       };
       res.status(200).json(
         {
