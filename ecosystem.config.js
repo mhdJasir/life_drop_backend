@@ -4,7 +4,7 @@ module.exports = {
       name: 'life-drop',
       script: 'src/index.ts',                 
       interpreter: './node_modules/.bin/ts-node',  
-      watch: true,                            
+      watch: false,                            
       env: {
         NODE_ENV: 'development',
       },
