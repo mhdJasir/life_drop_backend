@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { JwtPayload } from 'jsonwebtoken';
 import { PhoneRequests, PhoneRequestsAttributes } from '../models/phone_requests';
 import { User } from '../models/user';
 import Associations from '../config/associations';
 import { Donor } from '../models/donor';
+import { JwtPayload } from "jsonwebtoken";
 
 interface AuthenticatedRequest extends Request {
     user?: JwtPayload | string;
