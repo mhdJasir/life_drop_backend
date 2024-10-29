@@ -16,7 +16,6 @@ const getProtectedData = (req: AuthenticatedRequest, res: Response): {} => {
 
 
 class PhoneRequestsController {
-
     static async userRequests(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const user = getProtectedData(req, res);
