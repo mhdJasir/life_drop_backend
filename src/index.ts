@@ -19,6 +19,7 @@ deleteInvalidRequests.start();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/images", express.static("images"));
+app.use("/files", express.static("files"));
 
 app.use(path, authRouter);
 app.use(path, authMiddleware, donorRoute);
