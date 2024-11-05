@@ -29,7 +29,9 @@ jobs:
        echo "${{ secrets.PROD_ENV_FILE }}" > .env
 
     - run: |
+        # sudo /opt/lampp/lampp restart
         pm2 start ecosystem.config.js --env production
+        sudo systemctl restart nginx
 
         
     
