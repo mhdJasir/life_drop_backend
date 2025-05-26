@@ -11,7 +11,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
             message: message,
         });
     }
-    
+
     if (err instanceof ValidationError) {
         return res.status(400).json({
             status: 400,
@@ -22,6 +22,14 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
     if (err instanceof ForeignKeyConstraintError) {
         const message = `Foreign Key Constraint Error on model '${err.table}' with fields: ${err.fields}`;
 
+        return res.status(400).json({
+            status: 400,
+            message: message,
+        });
+    }
+
+    if (err instanceof Error) {
+        const message = err.message;
         return res.status(400).json({
             status: 400,
             message: message,
