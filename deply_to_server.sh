@@ -19,6 +19,7 @@ ssh -i $PRIVATE_KEY -o StrictHostKeyChecking=no $SSH_USER@$SERVER_IP << 'EOF'
   echo "📥 Pulling latest code from main branch..."
   git pull origin main
 
+  sudo npm i
   # Start app and restart services
   echo "🚀 Starting app with PM2..."
   pm2 start ecosystem.config.js --env production

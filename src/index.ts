@@ -28,16 +28,6 @@ app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
 app.use('/fonts', express.static(fontsDir));
 
-
-app.use(apiPath, authRouter);
-app.use(apiPath, authMiddleware, donorRoute);
-app.use(apiPath, authMiddleware, districtRoute);
-app.use(apiPath, authMiddleware, phoneReqRoute);
-app.use(apiPath, authMiddleware, bloodRequestRoute);
-app.use(apiPath, authMiddleware, donorReqResRoute);
-
-app.use(errorHandler);
-
 app.get(`${apiPath}fonts`, async (req, res) => {
   try {    
     const files = await fs.readdir(fontsDir);
@@ -52,6 +42,15 @@ app.get(`${apiPath}fonts`, async (req, res) => {
     res.status(500).json({ error: 'Failed to list fonts' });
   }
 });
+
+app.use(apiPath, authRouter);
+app.use(apiPath, authMiddleware, donorRoute);
+app.use(apiPath, authMiddleware, districtRoute);
+app.use(apiPath, authMiddleware, phoneReqRoute);
+app.use(apiPath, authMiddleware, bloodRequestRoute);
+app.use(apiPath, authMiddleware, donorReqResRoute);
+
+app.use(errorHandler);
 
 const PORT: number = Number(process.env.PORT) || 3000;
 
