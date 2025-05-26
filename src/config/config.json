@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "jasir",
-    "password": "6758",
+    "password": "jasir@6758",
     "database": "life-drop",
     "host": "127.0.0.1",
     "dialect": "mysql"

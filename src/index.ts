@@ -1,7 +1,7 @@
 import express from 'express';
 const app = express();
 import bodyParser from "body-parser";
-import path from "./config/path_conf";
+import apiPath from "./config/path_conf";
 import authRouter from "./routes/auth_route";
 import donorRoute from "./routes/donor_route";
 import districtRoute from "./routes/district_route";
@@ -12,6 +12,8 @@ import authMiddleware from "./middlewares/auth";
 import errorHandler from "./error_handling/error_handler";
 import db from "./models";
 import deleteInvalidRequests from './crone/delete_outdated_requests';
+const path = require('path');
+const fs = require('fs').promises;
 
 ///CRON-JOBS
 deleteInvalidRequests.start();
@@ -20,15 +22,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
+app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
 
-app.use(path, authRouter);
-app.use(path, authMiddleware, donorRoute);
-app.use(path, authMiddleware, districtRoute);
-app.use(path, authMiddleware, phoneReqRoute);
-app.use(path, authMiddleware, bloodRequestRoute);
-app.use(path, authMiddleware, donorReqResRoute);
+
+app.use(apiPath, authRouter);
+app.use(apiPath, authMiddleware, donorRoute);
+app.use(apiPath, authMiddleware, districtRoute);
+app.use(apiPath, authMiddleware, phoneReqRoute);
+app.use(apiPath, authMiddleware, bloodRequestRoute);
+app.use(apiPath, authMiddleware, donorReqResRoute);
 
 app.use(errorHandler);
+
+app.get('/fonts', async (req, res) => {
+  try {
+    const fontsDir = path.join(__dirname, 'fonts');
+    const files = await fs.readdir(fontsDir);
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const fontList = files.map((file: any)  => ({
+      name: file,
+      url: `${baseUrl}/fonts/${encodeURIComponent(file)}`
+    }));
+    res.json(fontList);
+  } catch (err) {
+    console.error('Error reading fonts directory:', err);
+    res.status(500).json({ error: 'Failed to list fonts' });
+  }
+});
 
 const PORT: number = Number(process.env.PORT) || 3000;
 
