@@ -1,27 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-const fs = require('fs').promises;
 import path from 'path';
+import fs from "fs";
 
 
 class PublicController {
 
-    static getBaseUrl(req: Request): String {
-        let isServer;
+    static getBaseUrl(req: Request): string {
         const hostname = req.hostname;
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            isServer = false;
-        } else {
-            isServer = true;
-        }
-        return `${isServer ? "https" : "http"}://${req.get('host')}`;
+        const isServer = !(hostname === 'localhost' || hostname === '127.0.0.1');
+        return `${isServer ? 'https' : 'http'}://${req.get('host')}`;
     }
+
+    static fontPath = () => path.join(__dirname, '../..', 'fonts');
 
     static async getFonts(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const fontsDir = path.join(__dirname, '../..', 'fonts');
-            const files = await fs.readdir(fontsDir);
+            const files = await fs.promises.readdir(PublicController.fontPath());
             const baseUrl = PublicController.getBaseUrl(req);
-            const fontList = files.map((file: any) => ({
+            const fontList = files.map(file => ({
                 name: file,
                 url: `${baseUrl}/fonts/${encodeURIComponent(file)}`
             }));
@@ -42,11 +38,18 @@ class PublicController {
             const fileName = req.file.filename;
 
             const fontsDir = path.join(__dirname, '../..', 'fonts');
-            const files = await fs.readdir(fontsDir);
+            const files = await fs.promises.readdir(fontsDir);
+            const tempPath = req.file!.path;
             if (files.includes(fileName)) {
                 res.status(409).json({ error: `Font '${fileName}' already exists` });
+                await fs.promises.unlink(tempPath);
                 return;
             }
+            const originalName = req.file!.originalname;
+            const targetPath = path.join(PublicController.fontPath(), originalName);
+
+            await fs.promises.copyFile(tempPath, targetPath);
+            await fs.promises.unlink(tempPath);
             const baseUrl = PublicController.getBaseUrl(req);
             res.status(201).json({
                 name: fileName,
