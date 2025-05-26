@@ -35,7 +35,7 @@ app.use(apiPath, authMiddleware, donorReqResRoute);
 
 app.use(errorHandler);
 
-app.get(`${apiPath}apiPath`, async (req, res) => {
+app.get(`${apiPath}fonts`, async (req, res) => {
   try {    
     const files = await fs.readdir(fontsDir);
     const baseUrl = `${req.protocol}://${req.get('host')}`;
