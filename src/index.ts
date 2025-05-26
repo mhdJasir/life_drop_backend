@@ -17,12 +17,13 @@ const fs = require('fs').promises;
 
 ///CRON-JOBS
 deleteInvalidRequests.start();
+const fontsDir = path.join(__dirname, '..', 'fonts');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
-app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+app.use('/fonts', express.static(fontsDir));
 
 
 app.use(apiPath, authRouter);
@@ -36,7 +37,6 @@ app.use(errorHandler);
 
 app.get('/fonts', async (req, res) => {
   try {
-    const fontsDir = path.join(__dirname, 'fonts');
     const files = await fs.readdir(fontsDir);
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const fontList = files.map((file: any)  => ({
