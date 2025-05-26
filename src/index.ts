@@ -35,18 +35,14 @@ app.use(apiPath, authMiddleware, donorReqResRoute);
 
 app.use(errorHandler);
 
-app.get('/fonts', async (req, res) => {
-  try {
-    console.log("Hereeeeeeeeeeeeeeeeeeeee");
-    
+app.get(`${apiPath}apiPath`, async (req, res) => {
+  try {    
     const files = await fs.readdir(fontsDir);
-    console.log(files);
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const fontList = files.map((file: any)  => ({
       name: file,
       url: `${baseUrl}/fonts/${encodeURIComponent(file)}`
     }));
-    console.log(fontList);
     res.json(fontList);
   } catch (err) {
     console.error('Error reading fonts directory:', err);
