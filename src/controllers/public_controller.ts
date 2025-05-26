@@ -15,7 +15,9 @@ class PublicController {
 
     static async getFonts(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const files = await fs.promises.readdir(PublicController.fontPath());
+            const dir = PublicController.fontPath();
+            await fs.promises.mkdir(dir, { recursive: true });
+            const files = await fs.promises.readdir(dir);
             const baseUrl = PublicController.getBaseUrl(req);
             const fontList = files.map(file => ({
                 name: file,
@@ -37,8 +39,9 @@ class PublicController {
             }
             const fileName = req.file.filename;
 
-            const fontsDir = path.join(__dirname, '../..', 'fonts');
-            const files = await fs.promises.readdir(fontsDir);
+            const dir = PublicController.fontPath();
+            await fs.promises.mkdir(dir, { recursive: true });
+            const files = await fs.promises.readdir(dir);
             const tempPath = req.file!.path;
             if (files.includes(fileName)) {
                 res.status(409).json({ error: `Font '${fileName}' already exists` });
