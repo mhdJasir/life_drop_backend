@@ -23,10 +23,11 @@ const fontsDir = path.join(__dirname, '..', 'fonts');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.set('trust proxy', true);
 
 app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
-app.use('/fonts', express.static(fontsDir));
+app.use('/fonts', express.static("fonts"));
 
 app.get(`${apiPath}fonts`, async (req, res) => {
   try {    
@@ -42,7 +43,6 @@ app.get(`${apiPath}fonts`, async (req, res) => {
     res.status(500).json({ error: 'Failed to list fonts' });
   }
 });
-
 app.use(apiPath, authRouter);
 app.use(apiPath, authMiddleware, donorRoute);
 app.use(apiPath, authMiddleware, districtRoute);
