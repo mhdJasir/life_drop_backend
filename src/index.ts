@@ -23,16 +23,22 @@ const fontsDir = path.join(__dirname, '..', 'fonts');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.set('trust proxy', true);
 
 app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
 app.use('/fonts', express.static("fonts"));
 
 app.get(`${apiPath}fonts`, async (req, res) => {
-  try {    
+  try {   
+    let isServer;
+    const hostname = req.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      isServer=false;
+    } else {
+      isServer=true;
+    } 
     const files = await fs.readdir(fontsDir);
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const baseUrl = `${isServer?"https":"http"}://${req.get('host')}`;
     const fontList = files.map((file: any)  => ({
       name: file,
       url: `${baseUrl}/fonts/${encodeURIComponent(file)}`
