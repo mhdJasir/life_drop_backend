@@ -10,9 +10,10 @@ import bloodRequestRoute from "./routes/blood_request_route";
 import donorReqResRoute from "./routes/donor_request_response_route";
 import authMiddleware from "./middlewares/auth";
 import errorHandler from "./error_handling/error_handler";
+import cors from 'cors';
 import db from "./models";
 import deleteInvalidRequests from './crone/delete_outdated_requests';
-const path = require('path');
+import path from 'path';
 const fs = require('fs').promises;
 
 ///CRON-JOBS
@@ -21,6 +22,8 @@ const fontsDir = path.join(__dirname, '..', 'fonts');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
+
 app.use("/images", express.static("images"));
 app.use("/files", express.static("files"));
 app.use('/fonts', express.static(fontsDir));
