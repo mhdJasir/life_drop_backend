@@ -7,6 +7,7 @@ import donorRoute from "./routes/donor_route";
 import districtRoute from "./routes/district_route";
 import phoneReqRoute from "./routes/phone_requests_route";
 import bloodRequestRoute from "./routes/blood_request_route";
+import webhhokRoute from "./routes/webb_hooks";
 import publicRoute from "./routes/public_route";
 import donorReqResRoute from "./routes/donor_request_response_route";
 import authMiddleware from "./middlewares/auth";
@@ -28,6 +29,7 @@ app.use('/fonts', express.static("fonts"));
 
 app.use(apiPath, publicRoute);
 app.use(apiPath, authRouter);
+app.use(apiPath, webhhokRoute);
 app.use(apiPath, authMiddleware, donorRoute);
 app.use(apiPath, authMiddleware, districtRoute);
 app.use(apiPath, authMiddleware, phoneReqRoute);
