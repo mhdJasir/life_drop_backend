@@ -4,9 +4,14 @@ const VERIFY_TOKEN = 'jasir_super_token_123';
 
 class MetaWebHookController {
   async webhook(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log("Im hereeeee");
+    
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
     const challenge = req.query['hub.challenge'];
+    console.log(mode);
+    console.log(token);
+    console.log(challenge);
 
     if (mode && token) {
       if (mode === 'subscribe' && token === VERIFY_TOKEN) {
@@ -36,6 +41,8 @@ class MetaWebHookController {
               console.log(`• Status: ${status.status}`);
               console.log(`• Message ID: ${status.id}`);
               console.log(`• Timestamp: ${status.timestamp}`);
+              console.log(status);
+              
             });
           }
         });
